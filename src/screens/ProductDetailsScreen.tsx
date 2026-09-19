@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
     Image,
@@ -13,6 +13,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { RootStackParamList } from '../navigation/AppNavigator';
 import { useAppSelector } from '../store/hooks';
+import { getProductById, mapDatabaseProduct } from '../database/productRepository';
+import type { Product } from '../store/product/productSlice';
 
 type Props = NativeStackScreenProps<
     RootStackParamList,
@@ -30,7 +32,28 @@ export default function ProductDetailsScreen({
         ),
     );
 
-    if (!product) {
+    const [databaseProduct, setDatabaseProduct] =
+        useState<Product | null>(null);
+
+    useEffect(() => {
+        if (product) {
+            return;
+        }
+
+        getProductById(productId)
+            .then(databaseProduct => {
+                if (databaseProduct) {
+                    setDatabaseProduct(mapDatabaseProduct(databaseProduct));
+                }
+            })
+            .catch(error => {
+                console.error('Failed to load product from database:', error);
+            });
+    }, [product, productId]);
+
+    const displayedProduct = product ?? databaseProduct;
+
+    if (!displayedProduct) {
         return (
             <View style={styles.center}>
                 <Text style={styles.notFound}>
@@ -43,7 +66,7 @@ export default function ProductDetailsScreen({
     const handleAddToCart = () => {
         console.log(
             'Add to cart:',
-            product.id,
+            displayedProduct.id,
         );
     };
 
@@ -55,7 +78,7 @@ export default function ProductDetailsScreen({
             >
                 <Image
                     source={{
-                        uri: product.thumbnail,
+                        uri: displayedProduct.thumbnail,
                     }}
                     style={styles.productImage}
                     resizeMode="contain"
@@ -63,11 +86,11 @@ export default function ProductDetailsScreen({
 
                 <View style={styles.content}>
                     <Text style={styles.title}>
-                        {product.title}
+                        {displayedProduct.title}
                     </Text>
 
                     <Text style={styles.price}>
-                        ${product.price}
+                        ${displayedProduct.price}
                     </Text>
 
                     <Text style={styles.descriptionTitle}>
@@ -75,7 +98,7 @@ export default function ProductDetailsScreen({
                     </Text>
 
                     <Text style={styles.description}>
-                        {product.description}
+                        {displayedProduct.description}
                     </Text>
                 </View>
             </ScrollView>

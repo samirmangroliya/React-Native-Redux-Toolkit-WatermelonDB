@@ -13,7 +13,7 @@ import {
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { fetchProducts } from '../store/product/productSlice';
+import { syncAndLoadProducts } from '../store/product/productSlice';
 
 import type { RootStackParamList } from '../navigation/AppNavigator';
 
@@ -22,17 +22,16 @@ type Props = NativeStackScreenProps<
     'Products'
 >;
 
+
+
 export default function ProductScreen({ navigation }: Props) {
     const dispatch = useAppDispatch();
 
-    const {
-        products,
-        loading,
-        error,
-    } = useAppSelector(state => state.products);
+    const { products, loading, error, isOffline } =
+        useAppSelector(state => state.products);
 
     useEffect(() => {
-        dispatch(fetchProducts());
+        dispatch(syncAndLoadProducts());
     }, [dispatch]);
 
     if (loading) {
@@ -43,6 +42,27 @@ export default function ProductScreen({ navigation }: Props) {
                 <Text style={styles.message}>
                     Loading products...
                 </Text>
+            </View>
+        );
+    }
+
+    if (!loading && isOffline && products.length === 0) {
+        return (
+            <View style={styles.center}>
+                <Text style={styles.emptyTitle}>
+                    No cached products available
+                </Text>
+
+                <Text style={styles.emptyMessage}>
+                    Connect to the internet and try again.
+                </Text>
+
+                <Pressable
+                    onPress={() => dispatch(syncAndLoadProducts())}
+                    style={styles.retryButton}
+                >
+                    <Text style={styles.retryText}>Retry</Text>
+                </Pressable>
             </View>
         );
     }
@@ -61,7 +81,13 @@ export default function ProductScreen({ navigation }: Props) {
         <ScrollView
             contentContainerStyle={styles.container}
         >
-
+            {isOffline && (
+                <View style={styles.offlineBanner}>
+                    <Text style={styles.offlineText}>
+                        You're offline • Showing cached products
+                    </Text>
+                </View>
+            )}
             {products.slice(0, 50).map(product => (
                 <Pressable
                     key={product.id}
@@ -160,8 +186,45 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 
+    offlineBanner: {
+        padding: 12,
+        marginBottom: 16,
+        borderRadius: 8,
+        backgroundColor: '#fff3cd',
+    },
+
+    offlineText: {
+        fontSize: 14,
+        textAlign: 'center',
+    },
+
     error: {
         fontSize: 16,
         textAlign: 'center',
+    },
+
+    emptyTitle: {
+        fontSize: 20,
+        fontWeight: '600',
+        marginBottom: 8,
+    },
+
+    emptyMessage: {
+        fontSize: 15,
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+
+    retryButton: {
+        paddingHorizontal: 24,
+        paddingVertical: 12,
+        borderRadius: 8,
+        backgroundColor: '#000',
+    },
+
+    retryText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '600',
     },
 });
