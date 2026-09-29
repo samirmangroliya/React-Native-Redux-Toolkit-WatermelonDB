@@ -12,13 +12,13 @@ import {
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { useAppDispatch, useAppSelector } from '../app/store/hooks';
-import { fetchProducts } from '../features/product/store/productSlice';
+import { useAppDispatch, useAppSelector } from '../../../app/store/hooks';
+import { fetchProducts } from '../store/productSlice';
 
-import type { RootStackParamList } from '../navigation/AppNavigator';
+import { ProductStackParamList } from '../navigation/ProductNavigator';
 
 type Props = NativeStackScreenProps<
-    RootStackParamList,
+    ProductStackParamList,
     'Products'
 >;
 

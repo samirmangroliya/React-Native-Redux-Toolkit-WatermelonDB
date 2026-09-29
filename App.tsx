@@ -4,7 +4,7 @@ import {Provider} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
 
 import {store} from './src/app/store/store';
-import AppNavigator from './src/navigation/AppNavigator';
+import AppNavigator from './src/app/navigation/AppNavigator';
 
 export default function App() {
   return (

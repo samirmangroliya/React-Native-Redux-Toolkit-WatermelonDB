@@ -4,16 +4,16 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ProductScreen from '../screens/ProductScreen';
 import ProductDetailsScreen from '../screens/ProductDetailsScreen';
 
-export type RootStackParamList = {
+export type ProductStackParamList = {
   Products: undefined;
   ProductDetails: {
     productId: number;
   };
 };
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<ProductStackParamList>();
 
-export default function AppNavigator() {
+export default function ProductNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
