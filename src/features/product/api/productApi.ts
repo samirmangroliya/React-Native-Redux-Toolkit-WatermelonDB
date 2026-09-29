@@ -1,4 +1,4 @@
-import {Product} from '../store/product/productSlice';
+import type {Product} from '../model/Product';
 
 interface ProductApiResponse {
   products: Product[];

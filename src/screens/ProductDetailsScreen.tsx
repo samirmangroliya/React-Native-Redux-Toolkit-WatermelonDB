@@ -12,7 +12,7 @@ import {
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { RootStackParamList } from '../navigation/AppNavigator';
-import { useAppSelector } from '../store/hooks';
+import { useAppSelector } from '../app/store/hooks';
 
 type Props = NativeStackScreenProps<
     RootStackParamList,

@@ -4,16 +4,9 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 
-import {fetchProductsFromApi} from '../../api/productApi';
-
-export interface Product {
-  id: string;
-  title: string;
-  price: number;
-  description: string;
-  thumbnail: string;
-}
-
+import {fetchProductsFromApi} from '../api/productApi';
+import type {Product} from '../model/Product';
+ 
 interface ProductState {
   products: Product[];
   loading: boolean;

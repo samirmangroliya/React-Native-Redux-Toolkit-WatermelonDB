@@ -7,7 +7,7 @@ import ProductDetailsScreen from '../screens/ProductDetailsScreen';
 export type RootStackParamList = {
   Products: undefined;
   ProductDetails: {
-    productId: string;
+    productId: number;
   };
 };
 

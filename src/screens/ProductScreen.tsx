@@ -12,8 +12,8 @@ import {
 
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { fetchProducts } from '../store/product/productSlice';
+import { useAppDispatch, useAppSelector } from '../app/store/hooks';
+import { fetchProducts } from '../features/product/store/productSlice';
 
 import type { RootStackParamList } from '../navigation/AppNavigator';
 
